@@ -100,21 +100,15 @@ for bill in my_bill['results']:
         = "{:.1f}".format((float(projects[bill['project_id']]['days_billed']) / float(projects[bill['project_id']]['tot_days'])) * 100)
 
 for pr in projects:
-    if 'perc_comp' in projects[pr].keys():
-        if (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 15:
-            projects[pr]['status'] = "Green"
-        elif (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 40:
-            projects[pr]['status'] = "Amber"
-        else:
-            projects[pr]['status'] = "Red"
-    else:
+    if 'perc_comp' not in projects[pr].keys():
         projects[pr]['perc_comp'] = 0
-        if (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 15:
-            projects[pr]['status'] = "Green"
-        elif (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 40:
-            projects[pr]['status'] = "Amber"
-        else:
-            projects[pr]['status'] = "Red"
+
+    if (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 15:
+        projects[pr]['status'] = "Green"
+    elif (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 40:
+        projects[pr]['status'] = "Amber"
+    else:
+        projects[pr]['status'] = "Red"
 
     t.add_row(  [
                     projects[pr]['name'],
