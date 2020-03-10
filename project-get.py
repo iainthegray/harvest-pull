@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import requests
 import pprint
@@ -23,9 +23,9 @@ right_now           = d.today()
 one_year = right_now - td(days=365)
 
 
-headers = {'Harvest-Account-ID': acc_id,
-            'Authorization': auth,
-            'User-Agent': "Harvest API"}
+headers = {'Harvest-Account-Id': acc_id,
+           'Authorization': "Bearer " + auth,
+           'User-Agent': "Harvest API"}
 
 url = "https://api.harvestapp.com/api/v2/projects"
 r = requests.get(url, headers=headers)
@@ -91,7 +91,6 @@ for bill in my_bill['results']:
     # Remove the TAM assist as I do not own this project
     if bill['client_name'] == 'HashiCorp' or bill['project_id'] == 23921242:
         continue
-
     print("{} - {}".format(bill['project_name'], bill['project_id']))
     projects[bill['project_id']]['days_billed'] \
         = "{:.1f}".format(bill['billable_hours'] / 8)
@@ -100,8 +99,10 @@ for bill in my_bill['results']:
     projects[bill['project_id']]['perc_comp'] \
         = "{:.1f}".format((float(projects[bill['project_id']]['days_billed']) / float(projects[bill['project_id']]['tot_days'])) * 100)
 
-
 for pr in projects:
+    if 'perc_comp' not in projects[pr].keys():
+        projects[pr]['perc_comp'] = 0
+
     if (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 15:
         projects[pr]['status'] = "Green"
     elif (float(projects[pr]['perc_days']) - float(projects[pr]['perc_comp'])) <= 40:
