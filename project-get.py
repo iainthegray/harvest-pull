@@ -8,11 +8,21 @@ from datetime import datetime as dt
 from texttable import Texttable
 import os
 
-#  Script takes 2 OS environmeent vars
-acc_id = os.environ['HARVEST_ACC_ID']
-auth = os.environ['HARVEST_AUTH_KEY']
+#  Script takes 2 OS environment vars
+try:
+    acc_id = os.environ['HARVEST_ACC_ID']
+except KeyError:
+    print("set harvest account ID as env var HARVEST_ACC_ID")
+    exit(1)
+
+try:
+    auth = os.environ['HARVEST_AUTH_KEY']
+except KeyError:
+    print("set harvest auth token as HARVEST_AUTH_KEY")
+    exit(1)
+
 # acc_id = "119xxx"
-# auth="Bearer 2221695.pt.xxx"
+# auth="2221695.pt.xxx"
 def numOfDays(date1, date2):
     return (date2-date1).days
 
